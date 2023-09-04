@@ -6,7 +6,7 @@ import cv2
 from tracking import trackTemplate
 
 hline = 200
-setpoint = 478 - hline 
+setpoint = 478 - hline
 t0 = time.time()
 seg = 80
 cmd = 'a0\n'
@@ -23,9 +23,9 @@ limites = [195, 272, 30, 600]
 time.sleep(2)
 
 while time.time() - t0 < seg:
+    tiempo.append(time.time() - t0)
     posiciones.append(trackTemplate(vs, template, limites, GRAFICAR=False)[0])
     pos = posiciones[-1]
-    tiempo.append(time.time() - t0)
     if pos >= setpoint:
         onoff.append(1)
         if cmd != 'a255\n':
@@ -39,7 +39,7 @@ while time.time() - t0 < seg:
             cmd = 'a180\n'
             arduino.write(bytes(cmd, 'utf-8'))
         else:
-            continue
+            continue 
 
 print(posiciones)
 
