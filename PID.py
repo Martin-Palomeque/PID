@@ -5,7 +5,7 @@ import cv2
 import time
 from tracking import trackTemplate
 from Funciones_PID import P,I,D
-
+import pandas as pd
 
 ki = 1
 kp = 1
@@ -58,7 +58,7 @@ while time.time() - t0 < seg:
         else:
             arduino.write(bytes(f'a{int(I)}\n', 'utf-8'))
 
-np.savetxt(f'PID-{seg}s-{kp}-{ki}-{kd}.csv', np.array(posiciones).T,setpoint,tubo_en_pixel, delimiter=',')
+#np.savetxt(f'PID-{seg}s-{kp}-{ki}-{kd}.csv', np.array(posiciones).T,setpoint,tubo_en_pixel, delimiter=',')
 
 fig, ax = plt.subplots()
 ax.plot(tiempo, posiciones,color = 'cornflowerblue')
@@ -67,6 +67,20 @@ plt.grid()
 plt.show()
 
 # print(trackTemplate(vs, template, limites, GRAFICAR=False))
+
+df = pd.DataFrame()
+df['Time'] = tiempo
+df['Position'] = posiciones
+df['Señal'] = señal
+df['kp'] = pd.Series([kp],index = [0])
+df['ki'] = pd.Series([ki],index = [0])
+df['kd'] = pd.Series([kd],index = [0])
+df['Setpoint'] = pd.Series([setpoint],index = [0])
+df['Pixel Lenght'] = pd.Series([tubo_en_pixel],index = [0])
+
+df.to_csv(r'PATH')
+
+
 
 time.sleep(2)
 arduino.close()

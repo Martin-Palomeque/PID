@@ -4,6 +4,7 @@ import time
 import serial as ser
 import cv2
 from tracking import trackTemplate
+import pandas as pd
 
 Kp = 1000
 setpoint = 278
@@ -12,7 +13,7 @@ seg = 35
 cmd = 'a0\n'
 posiciones = []
 tiempo = []
-
+pixeles = 478
 arduino = ser.Serial('COM6', baudrate=9600, bytesize=ser.EIGHTBITS,parity=ser.PARITY_NONE,stopbits=ser.STOPBITS_ONE, timeout=10)
 
 vs = cv2.VideoCapture(0, cv2.CAP_DSHOW)
@@ -47,6 +48,15 @@ plt.grid()
 plt.show()
 
 # print(trackTemplate(vs, template, limites, GRAFICAR=False))
+
+df = pd.DataFrame()
+df['Time'] = tiempo
+df['Position'] = posiciones
+df['kp'] = pd.Series([Kp],index = [0])
+df['Setpoint'] = pd.Series([setpoint],index = [0])
+df['Pixel Lenght'] = pd.Series([pixeles],index = [0])
+
+df.to_csv(r'PATH')
 
 time.sleep(2)
 arduino.close()

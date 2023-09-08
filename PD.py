@@ -5,7 +5,7 @@ import cv2
 import time
 from tracking import trackTemplate
 from Funciones_PID import P,I
-
+import pandas as pd
 
 kd = 1
 kp = 1
@@ -25,7 +25,7 @@ limites = [] #Limites del tubo
 time.sleep(2) #Tiempo necesario para que no le lleguen comandos muy rapido al arduino y se joda todo
 
 error = []
-
+señal = []
 while time.time() - t0 < seg:
     if len(error) < 1: #Cuando la longitud sea 1, le va a agregar otro numero y se va a poder hacer la resta de dt
         posiciones.append(tubo_en_pixel - trackTemplate(vs,template,limites,GRAFICAR=False)[0])
@@ -33,6 +33,7 @@ while time.time() - t0 < seg:
         tiempo.append(time.time() - t0)
         error.append(setpoint - pos)
         P = P(error[-1],kp)
+        señal.append(P)
         if P > 255:
             arduino.write(bytes(f'a255\n', 'utf-8'))
         elif P < 180:
@@ -47,6 +48,7 @@ while time.time() - t0 < seg:
         D = D(tiempo[-2],tiempo[-1],error[-2],error[-1],kd)
         P = P(error,kp)
         PD = P + D
+        señal.append(PD)
         if PD > 255:
             arduino.write(bytes(f'a255\n', 'utf-8'))
         elif PD < 180:
@@ -54,7 +56,7 @@ while time.time() - t0 < seg:
         else:
             arduino.write(bytes(f'a{int(I)}\n', 'utf-8'))
 
-np.savetxt(f'PD-{seg}s-{kp}-{kd}.csv', np.array(posiciones).T,setpoint,tubo_en_pixel, delimiter=',')
+#np.savetxt(f'PD-{seg}s-{kp}-{kd}.csv', np.array(posiciones).T,setpoint,tubo_en_pixel, delimiter=',')
 
 fig, ax = plt.subplots()
 ax.plot(tiempo, posiciones,color = 'cornflowerblue')
@@ -63,6 +65,18 @@ plt.grid()
 plt.show()
 
 # print(trackTemplate(vs, template, limites, GRAFICAR=False))
+
+df = pd.DataFrame()
+df['Time'] = tiempo
+df['Position'] = posiciones
+df['Señal'] = señal
+df['kp'] = pd.Series([kp],index = [0])
+df['kd'] = pd.Series([kd],index = [0])
+df['Setpoint'] = pd.Series([setpoint],index = [0])
+df['Pixel Lenght'] = pd.Series([tubo_en_pixel],index = [0])
+
+df.to_csv(r'PATH')
+
 
 time.sleep(2)
 arduino.close()
