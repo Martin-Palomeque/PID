@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import time
+from matplotlib.image import imsave
 
 def trackTemplate(vs, template, limites, GRAFICAR=False):
     # Leer frame
@@ -24,7 +25,37 @@ def trackTemplate(vs, template, limites, GRAFICAR=False):
         cv2.rectangle(corte, top_left, bottom_right, 255, 2)
         cv2.imshow("corte", corte)
     
-    return top_left
+    return top_left[0]
+
+
+class imagenes:
+    def __init__(self, vs):
+        self.vs = vs
+    
+    def sin_cortar(self, nombre='tubo'):
+        # Saca foto del tubo y guarda la foto
+        frame = self.vs.read()[1]
+        tubo = np.mean(frame, axis=2)
+        imsave(f'{nombre}.png', tubo, cmap='gray')
+        # Guarda el nombre de la foto a cortar
+        self.a_cortar = nombre
+    
+    def cortar(self, limites, nombre='corte'):
+        # Define los limites
+        min_x, max_x, min_y, max_y = limites
+        # Intenta leer imagen a cortar y si no saca una
+        try:
+            corte = cv2.imread(f'{self.a_cortar}.png')
+        except AttributeError:
+            corte = self.vs.read()[1]
+        # Corta la imagen
+        corte = corte[min_y:max_y, min_x:max_x, :]
+        # Guarda el corte
+        corte = np.mean(corte, axis=2)
+        imsave(f'{nombre}.png', corte, cmap='gray')
+    
+    def template(self):
+        print('El template siempre lo cortamos a mano, ni me caliento')
 
 
 class controlador:
@@ -52,7 +83,7 @@ class controlador:
         while time.time()- t0 < self.seg:
             # Appendea tiempos y posiciones
             tiempo.append(time.time() - t0)
-            posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False)[0])
+            posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False))
             pos = posiciones[-1]
 
             # Chequea posiciones y manda la respuesta correspondiente
@@ -62,6 +93,8 @@ class controlador:
             elif pos >= self.setpoint and cmd != f'a{self.min}\n':
                 cmd = f'a{self.min}\n'
                 self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
+            
+        self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
         
         return np.array(tiempo), np.array(posiciones), np.array(onoff)
 
@@ -76,7 +109,7 @@ class controlador:
         while time.time() - t0 < self.seg:
             # Appendea tiempos y posiciones
             tiempo.append(time.time() - t0)
-            posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False)[0])
+            posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False))
             pos = posiciones[-1]
 
             # Calcula el error y la entrada
@@ -91,6 +124,8 @@ class controlador:
                 self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
             else:
                 self.arduino.write(bytes(f'a{int(P)}\n', 'utf-8'))
+
+        self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
         
         return np.array(tiempo), np.array(posiciones), np.array(P)
     
@@ -105,7 +140,7 @@ class controlador:
         while time.time() - t0 < self.seg:
             # Appendea tiempos y posiciones
             tiempo.append(time.time() - t0)
-            posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False)[0])
+            posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False))
             pos = posiciones[-1]
 
             # Calcula el error, el P y el I
@@ -127,6 +162,8 @@ class controlador:
                 self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
             else:
                 self.arduino.write(bytes(f'a{int(P + I)}\n', 'utf-8'))
+        
+        self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
 
         return np.array(tiempo), np.array(posiciones), np.array(P_list), np.array(I_list)
     
@@ -142,7 +179,7 @@ class controlador:
         while time.time() - t0 < self.seg:
             # Appendea tiempos y posiciones
             tiempo.append(time.time() - t0)
-            posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False)[0])
+            posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False))
             pos = posiciones[-1]
 
             # Calcula el error, el P, el I y el D
@@ -170,7 +207,29 @@ class controlador:
             else:
                 self.arduino.write(bytes(f'a{int(P + I + D)}\n', 'utf-8'))
 
+
+        self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
+
         return np.array(tiempo), np.array(posiciones), np.array(P_list), np.array(I_list), np.array(D_list)
     
-    def ZN(self, ):
+    def ZN(self, inicial=220, final=255, control='PID', tiempo_control=10):
+        # posiciones = []
+        # tiempo = []
+        
+        # self.arduino.write(bytes(f'a{inicial}\n', 'utf-8'))
+        # time.sleep(tiempo_control)
+        # self.arduino.write(bytes(f'a{final}\n', 'utf-8'))
+
+        # # PUEDE SER QUE TIRE ERROR
+        # t0 = time.time()
+        # while time.time() - t0 < tiempo_control or posiciones[-2] - posiciones[-1] > 2:
+        #     tiempo.append(time.time() - t0)
+        #     posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False))
+        
+        # self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
+
+        # max_diff = np.max(np.diff(posiciones))
+        # i_max_diff = np.argmax(np.diff(posiciones))
+        # if len(i_max_diff) > 1:
+        #     i_max_diff = i_max_diff[int(len(i_max_diff) / 2)]
         pass
