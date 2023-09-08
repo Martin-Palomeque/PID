@@ -140,4 +140,6 @@ plt.legend()
 plt.show()
 # print(On_1.values[-1])
 
-# print(t[1735])
+# print(t[1735])  #Indice para el cual t = 60s
+
+#Cambio random
