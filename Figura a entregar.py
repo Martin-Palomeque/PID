@@ -43,11 +43,11 @@ ax.axhline(200,color = 'indigo',alpha = 0.3, label = f'Setpoint')
 fig.set_figwidth(12)
 fig.set_figheight(8)
 ax.grid()
-ax.set_ylabel('Altura [pixeles]')
+ax.set_ylabel('Altura [pixeles]',fontsize = 15)
+ax.set_title('On-Off 2',fontsize = 18)
+plt.xlabel(f'Tiempo [s]',fontsize = 15)
 
-
-fig.suptitle(f'On-Off 2')
-plt.xlabel(f'Tiempo [s]')
+# fig.suptitle(f'On-Off 2', fontsize = 18)
 
 ###  Intervalos de prendido y apagado  ####
 On_1 = t[:indices_off[0]]
