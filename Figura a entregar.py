@@ -12,6 +12,11 @@ t = df['Time']
 pos = df['Position']
 power = df['On-Off']
 
+t = t[:1735]
+pos = pos[:1735]
+power = power[:1735]
+
+
 ### Indices ###
 
 indices_on = []
@@ -53,10 +58,10 @@ On_5 = t[indices_on[3]:indices_off[4]]
 On_6 = t[indices_on[4]:indices_off[5]]
 On_7 = t[indices_on[5]:indices_off[6]]
 On_8 = t[indices_on[6]:indices_off[7]]
-On_9 = t[indices_on[7]:indices_off[8]]
-On_10 = t[indices_on[8]:indices_off[9]]
-On_11 = t[indices_on[9]:indices_off[10]]
-On_12 = t[indices_on[10]:indices_off[11]]
+# On_9 = t[indices_on[7]:indices_off[8]]
+# On_10 = t[indices_on[8]:indices_off[9]]
+# On_11 = t[indices_on[9]:indices_off[10]]
+# On_12 = t[indices_on[10]:indices_off[11]]
 
 Off_1 = t[indices_off[0]:indices_on[0]]
 Off_2 = t[indices_off[1]:indices_on[1]]
@@ -66,38 +71,38 @@ Off_5 = t[indices_off[4]:indices_on[4]]
 Off_6 = t[indices_off[5]:indices_on[5]]
 Off_7 = t[indices_off[6]:indices_on[6]]
 Off_8 = t[indices_off[7]:indices_on[7]]
-Off_9 = t[indices_off[8]:indices_on[8]]
-Off_10 = t[indices_off[9]:indices_on[9]]
-Off_11 = t[indices_off[10]:indices_on[10]]
-Off_12 = t[indices_off[11]::]
+# Off_9 = t[indices_off[8]:indices_on[8]]
+# Off_10 = t[indices_off[9]:indices_on[9]]
+# Off_11 = t[indices_off[10]:indices_on[10]]
+# Off_12 = t[indices_off[11]::]
 
 ### Rectangulos On-Off  ###
 Opacidad = 0.15
-# ax.add_patch(Rectangle((t[0],pos[0]),On_1.values[-1]-On_1.values[0],400,alpha = Opacidad,color = 'darkgreen',label = f'Fuente Encendida'))
-# ax.add_patch(Rectangle((t_on[0],pos[0]),On_2.values[-1]-On_2.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-# ax.add_patch(Rectangle((t_on[1],pos[0]),On_3.values[-1]-On_3.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-# ax.add_patch(Rectangle((t_on[2],pos[0]),On_4.values[-1]-On_4.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-# ax.add_patch(Rectangle((t_on[3],pos[0]),On_5.values[-1]-On_5.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-# ax.add_patch(Rectangle((t_on[4],pos[0]),On_6.values[-1]-On_6.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-# ax.add_patch(Rectangle((t_on[5],pos[0]),On_7.values[-1]-On_7.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-# ax.add_patch(Rectangle((t_on[6],pos[0]),On_8.values[-1]-On_8.values[0],400,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t[0],pos[0]),On_1.values[-1]-On_1.values[0],400,alpha = Opacidad,color = 'darkgreen',label = f'Fuente Encendida'))
+ax.add_patch(Rectangle((t_on[0],pos[0]),On_2.values[-1]-On_2.values[0],400,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[1],pos[0]),On_3.values[-1]-On_3.values[0],400,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[2],pos[0]),On_4.values[-1]-On_4.values[0],400,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[3],pos[0]),On_5.values[-1]-On_5.values[0],400,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[4],pos[0]),On_6.values[-1]-On_6.values[0],400,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[5],pos[0]),On_7.values[-1]-On_7.values[0],400,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[6],pos[0]),On_8.values[-1]-On_8.values[0],400,alpha = Opacidad,color = 'darkgreen'))
 # ax.add_patch(Rectangle((t_on[7],pos[0]),On_9.values[-1]-On_9.values[0],400,alpha = Opacidad,color = 'darkgreen'))
 # ax.add_patch(Rectangle((t_on[8],pos[0]),On_10.values[-1]-On_10.values[0],400,alpha = Opacidad,color = 'darkgreen'))
 # ax.add_patch(Rectangle((t_on[9],pos[0]),On_11.values[-1]-On_11.values[0],400,alpha = Opacidad,color = 'darkgreen'))
 # ax.add_patch(Rectangle((t_on[10],pos[0]),On_12.values[-1]-On_12.values[0],400,alpha = Opacidad,color = 'darkgreen'))
 ###
-ax.add_patch(Rectangle((t[0],pos[0]),On_1.values[-1]-On_1.values[0],50,alpha = 0.3,color = 'darkgreen',label = f'Fuente Encendida'))
-ax.add_patch(Rectangle((t_on[0],pos[0]),On_2.values[-1]-On_2.values[0],50,alpha = 0.3,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[1],pos[0]),On_3.values[-1]-On_3.values[0],50,alpha = 0.3,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[2],pos[0]),On_4.values[-1]-On_4.values[0],50,alpha = 0.3,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[3],pos[0]),On_5.values[-1]-On_5.values[0],50,alpha = 0.3,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[4],pos[0]),On_6.values[-1]-On_6.values[0],50,alpha = 0.3,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[5],pos[0]),On_7.values[-1]-On_7.values[0],50,alpha = 0.3,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[6],pos[0]),On_8.values[-1]-On_8.values[0],50,alpha = 0.3,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[7],pos[0]),On_9.values[-1]-On_9.values[0],50,alpha = 0.3,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[8],pos[0]),On_10.values[-1]-On_10.values[0],50,alpha = 0.3,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[9],pos[0]),On_11.values[-1]-On_11.values[0],50,alpha = 0.3,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[10],pos[0]),On_12.values[-1]-On_12.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t[0],pos[0]),On_1.values[-1]-On_1.values[0],50,alpha = 0.3,color = 'darkgreen',label = f'Fuente Encendida'))
+# ax.add_patch(Rectangle((t_on[0],pos[0]),On_2.values[-1]-On_2.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[1],pos[0]),On_3.values[-1]-On_3.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[2],pos[0]),On_4.values[-1]-On_4.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[3],pos[0]),On_5.values[-1]-On_5.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[4],pos[0]),On_6.values[-1]-On_6.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[5],pos[0]),On_7.values[-1]-On_7.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[6],pos[0]),On_8.values[-1]-On_8.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[7],pos[0]),On_9.values[-1]-On_9.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[8],pos[0]),On_10.values[-1]-On_10.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[9],pos[0]),On_11.values[-1]-On_11.values[0],50,alpha = 0.3,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[10],pos[0]),On_12.values[-1]-On_12.values[0],50,alpha = 0.3,color = 'darkgreen'))
 ###
 # ax.add_patch(Rectangle((t_off[0],pos[0]),Off_1.values[-1]-Off_1.values[0],50,alpha = 0.3,color = 'tomato'))
 # ax.add_patch(Rectangle((t_off[1],pos[0]),Off_2.values[-1]-Off_2.values[0],50,alpha = 0.3,color = 'tomato'))
@@ -134,3 +139,5 @@ Opacity = 0.65
 plt.legend()
 plt.show()
 # print(On_1.values[-1])
+
+# print(t[1735])
