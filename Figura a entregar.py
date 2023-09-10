@@ -45,7 +45,7 @@ fig,ax = plt.subplots()
 # ax.scatter(t_off,pos_off,marker = '.',color = 'tomato',s=50)
 
 pos = [pos[i]*ptl for i in range(len(pos))]
-ax.plot(t,pos,color = 'cornflowerblue',label = f'Posicion')
+ax.plot(t,pos,color = 'cornflowerblue',label = f'Posición')
 ax.axhline(200*ptl,color = 'indigo',alpha = 0.3, label = f'Setpoint')
 
 
