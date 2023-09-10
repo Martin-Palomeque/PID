@@ -150,6 +150,8 @@ class controlador:
             P_list.append(P)
 
             if len(tiempo) > 1:
+                #integral += (tiempo[-1] - tiempo[-2])*error 
+                #I += Ki*integral
                 I += Ki*(tiempo[-1] - tiempo[-2])*error
             else:
                 I = 0
@@ -190,6 +192,8 @@ class controlador:
             P_list.append(P)
             # I y D
             if len(tiempo) > 1:
+                #integral += (tiempo[-1] - tiempo[-2])*error 
+                #I += Ki*integral
                 I += Ki*(tiempo[-1] - tiempo[-2])*error
                 D = Kd*(error - error_ant) / (tiempo[-1] - tiempo[-2])
             else:
