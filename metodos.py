@@ -264,3 +264,5 @@ class controlador:
             Ti = 2*L
             Td = 0.5*L
             return kp,Ti,Td ### No se que tan buena practica es poner los returns acá   ###
+        else:
+            print('El método especificado no es valido')
