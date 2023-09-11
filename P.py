@@ -60,3 +60,5 @@ df.to_csv(r'PATH')
 
 time.sleep(2)
 arduino.close()
+
+print('Cambio')
