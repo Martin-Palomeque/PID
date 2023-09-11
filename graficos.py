@@ -1,19 +1,42 @@
 import numpy as np
 import matplotlib.pyplot as plt
-plt.style.use('informes')
+import pandas as pd
+# plt.style.use('informes')
+path = [fr'Mediciones\Clase 3\Mediciones\PID\PID-2-{i}-0-barrido.csv' for i in[0,0.01,0.03,0.05,0.07,.09]]
 
-t, h, P = np.loadtxt('Mediciones/crtl_P_Kp5.csv', delimiter=',', unpack=True)
+fig, ax = plt.subplots(6,1,sharex=True)
+fig.set_figheight(8)
+fig.set_figwidth(12)
+ki_list = []
 
-fig, ax = plt.subplots(2, 1, sharex=True)
-ax[1].set_xlabel('Tiempo [s]')
-ax[0].set_ylabel('Altura [pixeles]')
-ax[1].set_ylabel('P [bits]')
+t = []
+h =[]
+P = []
+I = []
+D = []
+ki = []
+for path in path:
+    df = pd.read_csv(path)
+    t.append(df['Time'])
+    h.append(df['Position'])
+    P.append(['P'])
+    I.append(['I'])
+    D.append(df['D'])
+    ki.append(df['ki'][0])
+    kp = df['kp'][0]
+    kd = df['kd'][0]
+    setpoint = df['Setpoint']
+    # ki_list.append(ki)
+for i in range(6):
+    for j in range(6):
+        if i == j:
+            color = 'tomato' 
+            ax[i].plot(t[j],h[j],label = f'{ki[i]}',color = color)
+        else:
+            ax[i].plot(t[j],h[j],label = None,color = 'gray',alpha = 0.3)
+    ax[i].legend()
 
-ax[0].plot(t, h, 'C6')
-ax[1].plot(t, P, 'C2')
+        
 
-ax[0].axhline(250, c='k')
-ax[1].axhline(255, c='C4')
-ax[1].axhline(200, c='C5')
-
+# plt.legend()
 plt.show()
