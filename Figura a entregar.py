@@ -35,15 +35,20 @@ pos_off = [pos[i] for i in indices_off]
 ### Figura  ###
 fig,ax = plt.subplots()
 
-ax.plot(t,pos,color = 'cornflowerblue',label = f'Posicion')
-
-ax.axhline(200,color = 'indigo',alpha = 0.3, label = f'Setpoint')
+# ax.plot(t,pos,color = 'cornflowerblue',label = f'Posicion')
+# ax.axhline(200,color = 'indigo',alpha = 0.3, label = f'Setpoint')
 # ax.scatter(t_on,pos_on,marker = '.',color = 'darkgreen',s = 50)
 # ax.scatter(t_off,pos_off,marker = '.',color = 'tomato',s=50)
+
+pos = [pos[i]*ptl for i in range(len(pos))]
+ax.plot(t,pos,color = 'cornflowerblue',label = f'Posición')
+ax.axhline(200*ptl,color = 'indigo',alpha = 0.3, label = f'Setpoint')
+
+
 fig.set_figwidth(12)
 fig.set_figheight(8)
 ax.grid()
-ax.set_ylabel('Altura [pixeles]',fontsize = 15)
+ax.set_ylabel('Posición [cm]',fontsize = 15)
 ax.set_title('On-Off 2',fontsize = 18)
 plt.xlabel(f'Tiempo [s]',fontsize = 15)
 
@@ -78,18 +83,19 @@ Off_8 = t[indices_off[7]:indices_on[7]]
 
 ### Rectangulos On-Off  ###
 Opacidad = 0.15
-ax.add_patch(Rectangle((t[0],pos[0]),On_1.values[-1]-On_1.values[0],400,alpha = Opacidad,color = 'darkgreen',label = f'Fuente Encendida'))
-ax.add_patch(Rectangle((t_on[0],pos[0]),On_2.values[-1]-On_2.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[1],pos[0]),On_3.values[-1]-On_3.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[2],pos[0]),On_4.values[-1]-On_4.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[3],pos[0]),On_5.values[-1]-On_5.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[4],pos[0]),On_6.values[-1]-On_6.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[5],pos[0]),On_7.values[-1]-On_7.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-ax.add_patch(Rectangle((t_on[6],pos[0]),On_8.values[-1]-On_8.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-# ax.add_patch(Rectangle((t_on[7],pos[0]),On_9.values[-1]-On_9.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-# ax.add_patch(Rectangle((t_on[8],pos[0]),On_10.values[-1]-On_10.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-# ax.add_patch(Rectangle((t_on[9],pos[0]),On_11.values[-1]-On_11.values[0],400,alpha = Opacidad,color = 'darkgreen'))
-# ax.add_patch(Rectangle((t_on[10],pos[0]),On_12.values[-1]-On_12.values[0],400,alpha = Opacidad,color = 'darkgreen'))
+Height = 400*ptl
+ax.add_patch(Rectangle((t[0],pos[0]),On_1.values[-1]-On_1.values[0],Height,alpha = Opacidad,color = 'darkgreen',label = f'Fuente Encendida'))
+ax.add_patch(Rectangle((t_on[0],pos[0]),On_2.values[-1]-On_2.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[1],pos[0]),On_3.values[-1]-On_3.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[2],pos[0]),On_4.values[-1]-On_4.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[3],pos[0]),On_5.values[-1]-On_5.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[4],pos[0]),On_6.values[-1]-On_6.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[5],pos[0]),On_7.values[-1]-On_7.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
+ax.add_patch(Rectangle((t_on[6],pos[0]),On_8.values[-1]-On_8.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[7],pos[0]),On_9.values[-1]-On_9.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[8],pos[0]),On_10.values[-1]-On_10.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[9],pos[0]),On_11.values[-1]-On_11.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
+# ax.add_patch(Rectangle((t_on[10],pos[0]),On_12.values[-1]-On_12.values[0],Height,alpha = Opacidad,color = 'darkgreen'))
 ###
 # ax.add_patch(Rectangle((t[0],pos[0]),On_1.values[-1]-On_1.values[0],50,alpha = 0.3,color = 'darkgreen',label = f'Fuente Encendida'))
 # ax.add_patch(Rectangle((t_on[0],pos[0]),On_2.values[-1]-On_2.values[0],50,alpha = 0.3,color = 'darkgreen'))

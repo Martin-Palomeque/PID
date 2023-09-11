@@ -150,6 +150,8 @@ class controlador:
             P_list.append(P)
 
             if len(tiempo) > 1:
+                #integral += (tiempo[-1] - tiempo[-2])*error 
+                #I += Ki*integral
                 I += Ki*(tiempo[-1] - tiempo[-2])*error
             else:
                 I = 0
@@ -190,6 +192,8 @@ class controlador:
             P_list.append(P)
             # I y D
             if len(tiempo) > 1:
+                #integral += (tiempo[-1] - tiempo[-2])*error 
+                #I += Ki*integral
                 I += Ki*(tiempo[-1] - tiempo[-2])*error
                 D = Kd*(error - error_ant) / (tiempo[-1] - tiempo[-2])
             else:
@@ -213,23 +217,52 @@ class controlador:
         return np.array(tiempo), np.array(posiciones), np.array(P_list), np.array(I_list), np.array(D_list)
     
     def ZN(self, inicial=220, final=255, control='PID', tiempo_control=10):
-        # posiciones = []
-        # tiempo = []
+        posiciones = []
+        tiempo = []
         
-        # self.arduino.write(bytes(f'a{inicial}\n', 'utf-8'))
-        # time.sleep(tiempo_control)
-        # self.arduino.write(bytes(f'a{final}\n', 'utf-8'))
+        self.arduino.write(bytes(f'a{inicial}\n', 'utf-8'))
+        time.sleep(tiempo_control)
+        self.arduino.write(bytes(f'a{final}\n', 'utf-8'))
 
-        # # PUEDE SER QUE TIRE ERROR
-        # t0 = time.time()
-        # while time.time() - t0 < tiempo_control or posiciones[-2] - posiciones[-1] > 2:
-        #     tiempo.append(time.time() - t0)
-        #     posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False))
-        
-        # self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
+        # PUEDE SER QUE TIRE ERROR
+        ### Manda un pulso de largo tiempo_control y potencia final. Registra la posicion del vaso en ese intervalo ###
+        t0 = time.time()
+        while time.time() - t0 < tiempo_control or posiciones[-2] - posiciones[-1] > 2: #Que significancia tiene que la resta de las posiciones sea mayor a 2?
+            tiempo.append(time.time() - t0)
+            posiciones.append(trackTemplate(self.vs, self.template, self.limites, GRAFICAR=False))
+        ### Se vuelven los ventiladores a 0 ###
+        self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
 
-        # max_diff = np.max(np.diff(posiciones))
-        # i_max_diff = np.argmax(np.diff(posiciones))
-        # if len(i_max_diff) > 1:
-        #     i_max_diff = i_max_diff[int(len(i_max_diff) / 2)]
+        max_diff = np.max(np.diff(posiciones)) #np.diff hace out[i] = posiciones[i+1] - posiciones[i]
+        i_max_diff = np.argmax(np.diff(posiciones)) #Consigue el indice dentro de posiciones para el cual la diferencia es maxima.
+        if len(i_max_diff) > 1:
+            i_max_diff = i_max_diff[int(len(i_max_diff) / 2)]
         pass
+        ### Creo la recta tengente como una funcion lambda  ###
+        pendiente = posiciones[i_max_diff]/(tiempo[i_max_diff]-tiempo[i_max_diff-1])
+        t0 = tiempo[i_max_diff]
+        y0 = posiciones[i_max_diff]
+        tangente = lambda pendiente, t0, y0,t: pendiente*(t-t0)+y0
+        ### Creo una lista con los valores de la recta tangente en el intervalo ###
+        tangente_valores = [tangente(pendiente,t0,y0,t) for t in tiempo]
+        eje_inferior = np.zeros(len(tiempo))
+        corte_inferior = np.argmin(tangente_valores-eje_inferior) #Esto deberia encontrar el indice para el cual la tangente corta el eje inferior
+        L = tangente_valores[corte_inferior]
+        eje_superior = np.zeros(len(tiempo))*np.max(posiciones)
+        corte_superior = np.argmin(tangente_valores-eje_superior) 
+        T = tangente_valores[corte_superior]
+        R = pendiente
+        if control == 'P':
+            kp = 1/(R*L)
+            return kp
+        elif control == 'PI':
+            kp = 0.9/(R*L)
+            Ti = 3*L
+            return kp,Ti
+        elif control == 'PID':
+            kp = 1.2/(R*L)
+            Ti = 2*L
+            Td = 0.5*L
+            return kp,Ti,Td ### No se que tan buena practica es poner los returns acá   ###
+        else:
+            print('El método especificado no es valido')
