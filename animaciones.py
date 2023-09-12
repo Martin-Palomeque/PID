@@ -42,11 +42,13 @@ def update(frame,t,h):
     ax.cla()
     t_anim.append(t[0][frame])
     h_anim.append(h[0][frame])
-    ax.plot(t_anim,h_anim,color = 'cornflowerblue')
+    ax.hlines(setpoint,0,t_anim[-1], linestyles='--')
+    ax.grid()
+    ax.set_ylim(0, 500)
+    ax.set_xlim(0,None)
     ax.set_xlabel(f'Time [s]')
     ax.set_ylabel(f'Position [pixel]')
-    ax.grid()
-    # ax.axhline(setpoint, c='k', ls='--')
+    ax.plot(t_anim,h_anim,color = 'cornflowerblue')
 
 
 
@@ -56,7 +58,8 @@ fig.canvas.mpl_connect('scroll_event',onClick) #Conecta la figura a un evento. E
 
 
 ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h))
-writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=1800)
-ani.save('PIDgrid.mp4', writer=writer) 
-
+writer = animation.FFMpegWriter(fps=120, metadata=dict(artist='Me'), bitrate=5000)
+print('Guardando...')
+ani.save('PID120fps.mp4', writer=writer) 
+print("Ç'est fini")
 # plt.show()
