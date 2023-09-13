@@ -45,12 +45,12 @@ t[0] += 5
 
 t_anim = []
 h_anim = []
-
+line_P, = ax.plot([],[],color = 'indigo')
 def update(frame,t,h,t_max):
     t_anim.append(t[0][frame])
     h_anim.append(h[0][frame])
     # ax.hlines(setpoint,0,t_anim[-1], linestyles='--')
-    line_P = ax.plot(t_anim,h_anim,color = 'indigo')
+    line_P.set_data(t_anim[:frame],h_anim[:frame])
 
 
 t_max = round(t[0].iloc[-1])
@@ -71,118 +71,114 @@ else:
 
 
 # ###     Animacion de PI      ###
-# animacion = True
-# ki_path = [0.07]
-# path = [fr'Mediciones\Clase 3\Mediciones\PID\PID-2-{i}-0-barrido.csv' for i in ki_path]
+animacion = True
+ki_path = [0.07]
+path = [fr'Mediciones\Clase 3\Mediciones\PID\PID-2-{i}-0-barrido.csv' for i in ki_path]
 
-# t = []
-# h = []
-# P = []
-# ki = []
+t = []
+h = []
+P = []
+ki = []
 
-# t0 = 0
-# tf = 25
+t0 = 0
+tf = 25
 
-# for path in path: #Crea una lista de listas
-#     df = pd.read_csv(path)
-#     ki.append(df['ki'][0])
-#     #Selecciona los datos correspondientes al intervalo dado.
-#     df = df[df['Time']>t0]
-#     df = df[df['Time']<tf].reset_index()
+for path in path: #Crea una lista de listas
+    df = pd.read_csv(path)
+    ki.append(df['ki'][0])
+    #Selecciona los datos correspondientes al intervalo dado.
+    df = df[df['Time']>t0]
+    df = df[df['Time']<tf].reset_index()
 
-#     t.append(df['Time'])
-#     h.append(df['Position'])
-#     P.append(df['P'])
-#     setpoint = df['Setpoint']
+    t.append(df['Time'])
+    h.append(df['Position'])
+    P.append(df['P'])
+    setpoint = df['Setpoint']
 
+line_PI, = ax.plot([],[],color = 'cornflowerblue')
 
+t_anim = []
+h_anim = []
+def update(frame,t,h,t_max):
+    t_anim.append(t[0][frame])
+    h_anim.append(h[0][frame])
+    # ax.hlines(setpoint,0,t_anim[-1], linestyles='--')
+    line_PI.set_data(t_anim[:frame],h_anim[:frame])
+    
 
-# t_anim = []
-# h_anim = []
-# def update(frame,t,h,t_max):
-#     t_anim.append(t[0][frame])
-#     h_anim.append(h[0][frame])
-#     # ax.hlines(setpoint,0,t_anim[-1], linestyles='--')
-#     line_PI = ax.plot(t_anim,h_anim,color = 'cornflowerblue')
-#     # ax.grid()
-#     # ax.set_ylim(0, 600)
-#     # ax.set_xlim(t_anim[0],t_max)
-#     # ax.set_xlabel(f'Time [s]')
-#     # ax.set_ylabel(f'Position [pixel]')
+t_max = round(t[0].iloc[-1])
 
+# line_PID = ax.plot(t[0],h[0]/2,color = 'indigo')
+# plt.show()
 
-
-# t_max = round(t[0].iloc[-1])
-
-# # line_PID = ax.plot(t[0],h[0]/2,color = 'indigo')
-# # plt.show()
-
-# if animacion == True:
-#     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-#     writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=800)
-#     print('Guardando...')
-#     t1 = time.time()
-#     ani.save('PI60fps.mp4', writer=writer) 
-#     t2 = time.time()
-#     print(f'Finished in {t2-t1}')
-# else:
-#     line_PI = ax.plot(t[0],h[0],color = 'cornflowerblue')
+if animacion == True:
+    ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
+    writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=800)
+    print('Guardando...')
+    t1 = time.time()
+    ani.save('PI60fps.mp4', writer=writer) 
+    t2 = time.time()
+    print(f'Finished in {t2-t1}')
+else:
+    line_PI = ax.plot(t[0],h[0],color = 'cornflowerblue')
 
 
 
 # ###     Animacion de PID    ### -> Falta agregar que plotee sobre P y PI
 
-# animacion = True
+animacion = True
 
-# kd_path = [.75]
-# path = [fr'Mediciones\Clase 3\Mediciones\PID\PID-2-0.07-{i}-barrido.csv' for i in kd_path]
+kd_path = [.75]
+path = [fr'Mediciones\Clase 3\Mediciones\PID\PID-2-0.07-{i}-barrido.csv' for i in kd_path]
 
-# t = []
-# h = []
-# P = []
-# I = []
-# D = []
-# kd = []
+t = []
+h = []
+P = []
+I = []
+D = []
+kd = []
 
-# t0 = 0
-# tf = 25
+t0 = 0
+tf = 25
 
-# for path in path: #Crea una lista de listas
-#     df = pd.read_csv(path)
-#     kd.append(df['kd'][0])
-#     #Selecciona los datos correspondientes al intervalo dado.
-#     df = df[df['Time']>t0]
-#     df = df[df['Time']<tf].reset_index()
+for path in path: #Crea una lista de listas
+    df = pd.read_csv(path)
+    kd.append(df['kd'][0])
+    #Selecciona los datos correspondientes al intervalo dado.
+    df = df[df['Time']>t0]
+    df = df[df['Time']<tf].reset_index()
 
-#     t.append(df['Time'])
-#     h.append(df['Position'])
-#     P.append(df['P'])
-#     I.append(df['I'])
-#     D.append(df['D'])
-#     setpoint = df['Setpoint']
-
-
-# t_anim = []
-# h_anim = []
-
-# def update(frame,t,h,t_max):
-#     t_anim.append(t[0][frame])
-#     h_anim.append(h[0][frame])
-#     line_PID = ax.plot(t_anim,h_anim,color = 'tomato')
+    t.append(df['Time'])
+    h.append(df['Position'])
+    P.append(df['P'])
+    I.append(df['I'])
+    D.append(df['D'])
+    setpoint = df['Setpoint']
 
 
-# t_max = round(t[0].iloc[-1])
+t_anim = []
+h_anim = []
+line_PID, = ax.plot([],[],color = 'tomato')
 
-# if animacion == True:
-#     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-#     writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=800)
-#     print('Guardando...')
-#     t1 = time.time()
-#     ani.save('PID60fps.mp4', writer=writer) 
-#     t2 = time.time()
-#     print(f'Finished in {t2-t1}')
-# else:
-#     line_PID = ax.plot(t[0],h[0],color = 'tomato')
+def update(frame,t,h,t_max):
+    t_anim.append(t[0][frame])
+    h_anim.append(h[0][frame])
+    # line_PID = ax.plot(t_anim,h_anim,color = 'tomato')
+    line_PID.set_data(t_anim[:frame],h_anim[:frame])
+
+
+t_max = round(t[0].iloc[-1])
+
+if animacion == True:
+    ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
+    writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=800)
+    print('Guardando...')
+    t1 = time.time()
+    ani.save('PID60fps.mp4', writer=writer) 
+    t2 = time.time()
+    print(f'Finished in {t2-t1}')
+else:
+    line_PID = ax.plot(t[0],h[0],color = 'tomato')
 
 # plt.show()
 
