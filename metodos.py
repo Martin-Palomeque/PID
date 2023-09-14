@@ -3,6 +3,7 @@ import cv2
 import time
 from matplotlib.image import imsave
 
+
 def trackTemplate(vs, template, limites, GRAFICAR=False):
     # Leer frame
     frame = vs.read()[1]
@@ -98,7 +99,7 @@ class controlador:
         
         return np.array(tiempo), np.array(posiciones), np.array(onoff)
 
-    
+
     def P(self, Kp):
         # Crea las listas vacias que van a ser nuestras mediciones
         posiciones = []
@@ -129,6 +130,7 @@ class controlador:
         
         return np.array(tiempo), np.array(posiciones), np.array(P)
     
+
     def PI(self, Kp, Ki):
         # Crea las listas vacias que van a ser nuestras mediciones
         posiciones = []
@@ -168,7 +170,8 @@ class controlador:
         self.arduino.write(bytes(f'a{self.min}\n', 'utf-8'))
 
         return np.array(tiempo), np.array(posiciones), np.array(P_list), np.array(I_list)
-    
+
+
     def PID(self, Kp, Ki, Kd):
         # Crea las listas vacias que van a ser nuestras mediciones
         posiciones = []
@@ -216,7 +219,13 @@ class controlador:
 
         return np.array(tiempo), np.array(posiciones), np.array(P_list), np.array(I_list), np.array(D_list)
     
-    def ZN(self, inicial=220, final=255, control='PID', tiempo_control=10):
+
+    def ZN(self, inicial=None, final=None, control='PID', tiempo_control=20):
+        if inicial is None:
+            inicial = self.min
+        if final is None:
+            final = self.max
+        
         posiciones = []
         tiempo = []
         
