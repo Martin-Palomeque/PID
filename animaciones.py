@@ -63,11 +63,13 @@ t_max = round(t[0].iloc[-1])
 # plt.show()
 
 if animacion == True:
+    fps = 60
     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-    writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=800)
-    print('Guardando...')
+    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=800)
+    name = f'P-{fps}.mp4'
+    print(f'Guardando como {name}...')
     t1 = time.time()
-    ani.save('P60fps.mp4', writer=writer) 
+    ani.save(name, writer=writer) 
     t2 = time.time()
     print(f'Finished in {t2-t1}')
 else:
@@ -114,15 +116,15 @@ t_max = round(t[0].iloc[-1])
 # plt.show()
 
 if animacion == True:
+    fps = 60
     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-    writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=800)
-    name = f'PI60fps.mp4'
+    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=800)
+    name = f'PI-{fps}.mp4'
     print(f'Guardando como {name}...')
     t1 = time.time()
     ani.save(name, writer=writer) 
     t2 = time.time()
     print(f'Finished in {t2-t1}')
-else:
     line_PI = ax.plot(t[0],h[0],color = 'cornflowerblue')
 
 
@@ -171,12 +173,13 @@ def update(frame,t,h,t_max):
 t_max = round(t[0].iloc[-1])
 
 if animacion == True:
+    fps = 60
     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-    writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=800)
-    name = f'PID60fps.mp4'
+    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=800)
+    name = f'PID-{fps}.mp4'
     print(f'Guardando como {name}...')
     t1 = time.time()
-    ani.save('', writer=writer) 
+    ani.save(name, writer=writer) 
     t2 = time.time()
     print(f'Finished in {t2-t1}')
 else:
