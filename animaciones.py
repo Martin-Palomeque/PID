@@ -6,15 +6,20 @@ import pandas as pd
 import matplotlib
 
 ###     Seteo de la figura  ###
+t0 = 0
+tf = 30
+
 fig, ax = plt.subplots()
 fig.set_figheight(8)
 fig.set_figwidth(12)
 ax.grid()
 ax.set_ylim(0, 600)
-ax.set_xlim(0,25)
+ax.set_xlim(t0,tf)
 ax.set_xlabel(f'Time [s]')
 ax.set_ylabel(f'Position [pixel]')
 matplotlib.rcParams['animation.ffmpeg_path'] = r"C:\Users\lucio\OneDrive\Documentos\Python\ffmpeg-6.0-essentials_build\bin\ffmpeg.exe"
+
+
 
 ###     Animacion de P      ###
 animacion = True
@@ -26,8 +31,7 @@ h = []
 P = []
 kp = []
 
-t0 = 0
-tf = 25
+
 
 for path in path: #Crea una lista de listas
     df = pd.read_csv(path)
@@ -41,7 +45,7 @@ for path in path: #Crea una lista de listas
     P.append(df['P'])
     setpoint = df['Setpoint']
 
-t[0] += 5
+t[0] += 4.5 #Este tiempo lo agrego para que la curva levante mas o menos al mismo timepo. Esto se debe a que la potencia cero en P solo era de 180 bits. Y en PID y PI era de 0.
 
 t_anim = []
 h_anim = []
@@ -59,11 +63,13 @@ t_max = round(t[0].iloc[-1])
 # plt.show()
 
 if animacion == True:
+    fps = 60
     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-    writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=800)
-    print('Guardando...')
+    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=800)
+    name = f'P-{fps}.mp4'
+    print(f'Guardando como {name}...')
     t1 = time.time()
-    ani.save('P60fps.mp4', writer=writer) 
+    ani.save(name, writer=writer) 
     t2 = time.time()
     print(f'Finished in {t2-t1}')
 else:
@@ -80,8 +86,6 @@ h = []
 P = []
 ki = []
 
-t0 = 0
-tf = 25
 
 for path in path: #Crea una lista de listas
     df = pd.read_csv(path)
@@ -112,14 +116,15 @@ t_max = round(t[0].iloc[-1])
 # plt.show()
 
 if animacion == True:
+    fps = 60
     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-    writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=800)
-    print('Guardando...')
+    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=800)
+    name = f'PI-{fps}.mp4'
+    print(f'Guardando como {name}...')
     t1 = time.time()
-    ani.save('PI60fps.mp4', writer=writer) 
+    ani.save(name, writer=writer) 
     t2 = time.time()
     print(f'Finished in {t2-t1}')
-else:
     line_PI = ax.plot(t[0],h[0],color = 'cornflowerblue')
 
 
@@ -138,8 +143,6 @@ I = []
 D = []
 kd = []
 
-t0 = 0
-tf = 25
 
 for path in path: #Crea una lista de listas
     df = pd.read_csv(path)
@@ -170,11 +173,13 @@ def update(frame,t,h,t_max):
 t_max = round(t[0].iloc[-1])
 
 if animacion == True:
+    fps = 60
     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-    writer = animation.FFMpegWriter(fps=60, metadata=dict(artist='Me'), bitrate=800)
-    print('Guardando...')
+    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=800)
+    name = f'PID-{fps}.mp4'
+    print(f'Guardando como {name}...')
     t1 = time.time()
-    ani.save('PID60fps.mp4', writer=writer) 
+    ani.save(name, writer=writer) 
     t2 = time.time()
     print(f'Finished in {t2-t1}')
 else:
