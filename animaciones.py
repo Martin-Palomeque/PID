@@ -15,16 +15,15 @@ fig.set_figwidth(12)
 ax.grid()
 ax.set_ylim(0, 600)
 ax.set_xlim(t0,tf)
-ax.set_xlabel(f'Time [s]')
-ax.set_ylabel(f'Position [pixel]')
+ax.set_xlabel(f'Time [s]',fontsize = 'large')
+ax.set_ylabel(f'Position [pixel]',fontsize = 'large')
 matplotlib.rcParams['animation.ffmpeg_path'] = r"C:\Users\lucio\OneDrive\Documentos\Python\ffmpeg-6.0-essentials_build\bin\ffmpeg.exe"
-
-
+plt.rcParams["animation.convert_path"] = r"C:\Program Files\ImageMagick-7.1.1-Q16-HDRI\magick.exe"
 
 ###     Animacion de P      ###
 animacion = True
 kp_path = [2]
-path = [fr'Mediciones\Clase 3\Mediciones\PID\PID-{i}-0-0-barrido.csv' for i in kp_path]
+path = [fr'Mediciones\Clase 3\PID\PID-{i}-0-0-barrido.csv' for i in kp_path]
 
 t = []
 h = []
@@ -49,7 +48,9 @@ t[0] += 4.5 #Este tiempo lo agrego para que la curva levante mas o menos al mism
 
 t_anim = []
 h_anim = []
-line_P, = ax.plot([],[],color = 'indigo')
+line_P, = ax.plot([],[],color = 'indigo',linewidth = 3,alpha = 0.8,label = 'P')
+ax.hlines(400,t0,tf,linestyles='--',color = 'dimgray',alpha= 0.4,label = 'Setpoint')
+ax.legend(fontsize = 'xx-large')
 def update(frame,t,h,t_max):
     t_anim.append(t[0][frame])
     h_anim.append(h[0][frame])
@@ -63,13 +64,15 @@ t_max = round(t[0].iloc[-1])
 # plt.show()
 
 if animacion == True:
-    fps = 60
+    fps = 120
     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=800)
+    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=8000)
+    # writer = animation.PillowWriter(fps=fps,metadata=dict(artist='Me'),bitrate=300)
+    # writer = animation.PillowWriter(fps=fps)
     name = f'P-{fps}.mp4'
     print(f'Guardando como {name}...')
     t1 = time.time()
-    ani.save(name, writer=writer) 
+    ani.save(name, writer=writer)
     t2 = time.time()
     print(f'Finished in {t2-t1}')
 else:
@@ -79,7 +82,7 @@ else:
 # ###     Animacion de PI      ###
 animacion = True
 ki_path = [0.07]
-path = [fr'Mediciones\Clase 3\Mediciones\PID\PID-2-{i}-0-barrido.csv' for i in ki_path]
+path = [fr'Mediciones\Clase 3\PID\PID-2-{i}-0-barrido.csv' for i in ki_path]
 
 t = []
 h = []
@@ -99,7 +102,8 @@ for path in path: #Crea una lista de listas
     P.append(df['P'])
     setpoint = df['Setpoint']
 
-line_PI, = ax.plot([],[],color = 'cornflowerblue')
+line_PI, = ax.plot([],[],color = 'cornflowerblue',linewidth = 3,alpha = 0.8,label = 'PI')
+ax.legend(fontsize = 'xx-large')
 
 t_anim = []
 h_anim = []
@@ -116,9 +120,10 @@ t_max = round(t[0].iloc[-1])
 # plt.show()
 
 if animacion == True:
-    fps = 60
+    fps = 120
     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=800)
+    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=8000)
+    # writer = animation.PillowWriter(fps=fps,metadata=dict(artist='Me'),bitrate=300)
     name = f'PI-{fps}.mp4'
     print(f'Guardando como {name}...')
     t1 = time.time()
@@ -134,7 +139,7 @@ if animacion == True:
 animacion = True
 
 kd_path = [.75]
-path = [fr'Mediciones\Clase 3\Mediciones\PID\PID-2-0.07-{i}-barrido.csv' for i in kd_path]
+path = [fr'Mediciones\Clase 3\PID\PID-2-0.07-{i}-barrido.csv' for i in kd_path]
 
 t = []
 h = []
@@ -161,7 +166,8 @@ for path in path: #Crea una lista de listas
 
 t_anim = []
 h_anim = []
-line_PID, = ax.plot([],[],color = 'tomato')
+line_PID, = ax.plot([],[],color = 'tomato',linewidth = 3,alpha = 0.8,label = 'PID')
+ax.legend(fontsize = 'xx-large')
 
 def update(frame,t,h,t_max):
     t_anim.append(t[0][frame])
@@ -173,9 +179,10 @@ def update(frame,t,h,t_max):
 t_max = round(t[0].iloc[-1])
 
 if animacion == True:
-    fps = 60
+    fps = 120
     ani = animation.FuncAnimation(fig,update,frames = len(t[0]),interval = 16.66,fargs = (t,h,t_max),repeat = False)
-    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=800)
+    writer = animation.FFMpegWriter(fps=fps, metadata=dict(artist='Me'), bitrate=8000)
+    # writer = animation.PillowWriter(fps=fps,metadata=dict(artist='Me'),bitrate=300)
     name = f'PID-{fps}.mp4'
     print(f'Guardando como {name}...')
     t1 = time.time()
