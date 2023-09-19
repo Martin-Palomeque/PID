@@ -115,24 +115,43 @@ for path in path:
 # plt.legend()
 # plt.show()
 
+# CON ESTE BICHO SE PUEDEN GRAFICAR 3 PLOTS DONDE SE VEA LA EVOLUCION DE P/PI/PID UNO DEBAJO DEL OTRO. SE PUEDEN VARIAR CUANTOS KP-KI-KD HAY
+
 fig, ax = plt.subplots(3,1,sharex = True)
 
-ax[0].plot(t_P[0],h_P[0],label = f'{kp[0]}')
-ax[0].plot(t_P[1],h_P[1],label = f'{kp[1]}')
-ax[0].plot(t_P[2],h_P[2],label = f'{kp[2]}')
-ax[0].hlines(setpoint_P,t_P[0].iloc[0],t_P[0].iloc[-1],linestyle = '--',alpha = 0.85,color = 'indigo')
-ax[0].legend(fontsize = 'medium')
+for i in range(3):
+    if i ==0:
+        for j in range(len(kp)):
+            ax[i].plot(t_P[j],h_P[j],label = f'{kp[j]}')
+            ax[i].hlines(setpoint_P,t_P[0].iloc[0],t_P[0].iloc[-1],linestyle = '--',alpha = 0.85,color = 'indigo')
+            ax[i].legend(fontsize = 'medium')
+    elif i == 1:
+        for j in range(len(ki)):
+            ax[i].plot(t_PI[j],h_PI[j],label = f'{ki[j]}')
+            ax[i].hlines(setpoint_PI,t_PI[0].iloc[0],t_PI[0].iloc[-1],linestyle = '--',alpha = 0.85,color = 'indigo')
+            ax[i].legend(fontsize = 'medium')
+    else:
+        for j in range(len(kd)):
+            ax[i].plot(t_PID[j],h_PID[j],label = f'{kd[j]}')
+            ax[i].hlines(setpoint_PID,t_PID[0].iloc[0],t_PID[0].iloc[-1],linestyle = '--',alpha = 0.85,color = 'indigo')
+            ax[i].legend(fontsize = 'medium')
 
-ax[1].plot(t_PI[0],h_PI[0],label = f'{ki[0]}')
-ax[1].plot(t_PI[1],h_PI[1],label = f'{ki[1]}')
-ax[1].plot(t_PI[2],h_PI[2],label = f'{ki[2]}')
-ax[1].hlines(setpoint_PI,t_PI[0].iloc[0],t_PI[0].iloc[-1],linestyle = '--',alpha = 0.85,color = 'indigo')
-ax[1].legend(fontsize = 'medium')
+# ax[0].plot(t_P[0],h_P[0],label = f'{kp[0]}')
+# ax[0].plot(t_P[1],h_P[1],label = f'{kp[1]}')
+# ax[0].plot(t_P[2],h_P[2],label = f'{kp[2]}')
+# ax[0].hlines(setpoint_P,t_P[0].iloc[0],t_P[0].iloc[-1],linestyle = '--',alpha = 0.85,color = 'indigo')
+# ax[0].legend(fontsize = 'medium')
 
-ax[2].plot(t_PID[0],h_PID[0],label = f'{kd[0]}')
-ax[2].plot(t_PID[1],h_PID[1],label = f'{kd[1]}')
-ax[2].plot(t_PID[2],h_PID[2],label = f'{kd[2]}')
-ax[2].hlines(setpoint_PID,t_PID[0].iloc[0],t_PID[0].iloc[-1],linestyle = '--',alpha = 0.85,color = 'indigo')
-ax[2].legend(fontsize = 'medium')
+# ax[1].plot(t_PI[0],h_PI[0],label = f'{ki[0]}')
+# ax[1].plot(t_PI[1],h_PI[1],label = f'{ki[1]}')
+# ax[1].plot(t_PI[2],h_PI[2],label = f'{ki[2]}')
+# ax[1].hlines(setpoint_PI,t_PI[0].iloc[0],t_PI[0].iloc[-1],linestyle = '--',alpha = 0.85,color = 'indigo')
+# ax[1].legend(fontsize = 'medium')
+
+# ax[2].plot(t_PID[0],h_PID[0],label = f'{kd[0]}')
+# ax[2].plot(t_PID[1],h_PID[1],label = f'{kd[1]}')
+# ax[2].plot(t_PID[2],h_PID[2],label = f'{kd[2]}')
+# ax[2].hlines(setpoint_PID,t_PID[0].iloc[0],t_PID[0].iloc[-1],linestyle = '--',alpha = 0.85,color = 'indigo')
+# ax[2].legend(fontsize = 'medium')
 
 plt.show()
